@@ -378,34 +378,39 @@ foreach ($files as $file) {
       <h2>Our best Chef</h2>
     </div>
     <div class="container">
-      <div class="grid-3">
+      <div class="grid-4">
         <div class="card-ch">
-          <img src="{{asset('images/ch1.png')}}" alts="">
+          <img src="{{asset('images/ch1.jpeg')}}" alts="">
           <div>
             <div class="det">
               <h2>Mehidi Hasan</h2>
-              <p>Main Chef</p>
             </div>
           </div>
         </div>
         <div class="card-ch">
-         <img src="{{asset('images/ch1.png')}}" alts="">
+         <img src="{{asset('images/ch2.jpeg')}}" alts="">
           <div>
             <div class="det">
               <h2>Mehidi Hasan</h2>
-              <p>Main Chef</p>
             </div>
           </div>
         </div>
         <div class="card-ch">
-         <img src="{{asset('images/ch1.png')}}" alts="">
+         <img src="{{asset('images/ch3.jpeg')}}" alts="">
           <div>
             <div class="det">
               <h2>Mehidi Hasan</h2>
-              <p>Main Chef</p>
             </div>
           </div>
         </div>
+        <div class="card-ch">
+            <img src="{{asset('images/ch4.jpeg')}}" alts="">
+             <div>
+               <div class="det">
+                 <h2>Mehidi Hasan</h2>
+               </div>
+             </div>
+           </div>
       </div>
       <img src="{{asset('images/customer-top-bg.png')}}" alt="" class="end">
   </section>
