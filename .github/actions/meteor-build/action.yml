@@ -18,11 +18,6 @@ runs:
   using: composite
 
   steps:
-    - name: Set Swap Space
-      uses: pierotofy/set-swap-space@master
-      with:
-        swap-size-gb: 4
-
     - name: Setup NodeJS
       uses: ./.github/actions/setup-node
       with:
@@ -141,6 +136,6 @@ runs:
         port: ${{ inputs.SSH_PORT }}
         script: |
           lxc file push -r /home/Rocket.Chat.tar.gz ${{ inputs.LXC_CONTAINER_NAME }}/home
-
+          lxc exec rocketchat-community-version bash -- cd /home && tar -xzf Rocket.Chat.tar.gz -C rocketchat
           
    
