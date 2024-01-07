@@ -140,7 +140,7 @@ runs:
         password: ${{ inputs.SSH_PASSWORD }}
         port: ${{ inputs.SSH_PORT }}
         script: |
-          lxc file push /home/Rocket.Chat.tar.gz ${{ inputs.LXC_CONTAINER_NAME }}/home
+          lxc file push -r /home/Rocket.Chat.tar.gz ${{ inputs.LXC_CONTAINER_NAME }}/home
 
           
    
