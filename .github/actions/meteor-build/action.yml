@@ -139,5 +139,5 @@ runs:
         script: |
           lxc file push /tmp/Rocket.Chat.tar.gz ${{ inputs.LXC_CONTAINER_NAME }}:/home
 
-          sshpass -p "${{ inputs.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ inputs.SSH_HOST }} -p ${{ inputs.SSH_PORT }} "lxc exec ${{ inputs.LXC_CONTAINER_NAME }} bash -- cd /home && tar xf Rocket.Chat.tar.gz"
+          
    
