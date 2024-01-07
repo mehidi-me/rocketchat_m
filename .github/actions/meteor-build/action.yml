@@ -122,15 +122,14 @@ runs:
         cd /tmp/dist
         tar czf /tmp/Rocket.Chat.tar.gz bundle
 
-    - name: Install sshpass
-      shell: bash
-        run: |
-          sudo apt-get install -y sshpass
-
-    - name: Copy build file to SSH server with username and password
-      shell: bash
-        run: |
-          sshpass -p ${{ inputs.SSH_PASSWORD }} scp -r /tmp/Rocket.Chat.tar.gz ${{ inputs.SSH_USERNAME }}@${{ inputs.SSH_HOST }}:/home
+    - name: Copy single file to remote
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        local: /tmp/Rocket.Chat.tar.gz
+        remote: /home/Rocket.Chat.tar.gz
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
 
 
     - name: SSH into the host and push files to LXC container
