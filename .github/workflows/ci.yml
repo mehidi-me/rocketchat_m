@@ -140,6 +140,8 @@ jobs:
         with:
           node-version: ${{ needs.release-versions.outputs.node-version }}
           coverage: true
+          secrets:
+            SSH_HOST: ${{ secrets.SSH_HOST }}
 
   build-prod:
     name: 📦 Meteor Build - official
