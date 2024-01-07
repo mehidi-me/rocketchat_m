@@ -39,7 +39,7 @@ https://cdn.jsdelivr.net/npm/air-datepicker@3.4.0/air-datepicker.min.css
   <header>
     <div class="container">
       <div class="logo">
-        <a href="index.html">
+        <a href="./">
           <img src="{{asset('images/logo.svg')}}" alt="" />
         </a>
       </div>
@@ -47,8 +47,8 @@ https://cdn.jsdelivr.net/npm/air-datepicker@3.4.0/air-datepicker.min.css
         <div class="links">
           <a href="#" onclick="menu()">Home</a>
           <a href="#about" onclick="menu()">Über uns</a>
-          <a href="#menu" onclick="menu()">Speisekarte</a>
-          <a href="#book" onclick="menu()">Einen Tisch reservieren</a>
+          <a href="#menu" onclick="menu()">Pizzakarte</a>
+          <a href="#book" onclick="menu()">Gruppenanlass</a>
           <a href="#feedback" onclick="menu()">Rückmeldung</a>
 
         </div>
@@ -56,9 +56,10 @@ https://cdn.jsdelivr.net/npm/air-datepicker@3.4.0/air-datepicker.min.css
         <i class="uil uil-align-center-alt menu" onclick="menu()"></i>
       </div>
       <div>
-        <a href="#" id="signupBtn" onclick="menu()">
+        {{-- <a href="#" id="signupBtn" onclick="menu()">
           <button><i class="uil uil-phone"></i> 080-3232-344</button>
-        </a>
+        </a> --}}
+        <a href="tel:+41616320202"><i class="uil uil-phone"></i>+41616320202</a>
       </div>
     </div>
   </header>
@@ -174,13 +175,13 @@ empfohlen für 3-4 Personen
  
 
     <div class="container">
-      <div class="tab">
+      {{-- <div class="tab">
         <button class="product-btn active" data-filter="all">All</button>
         <button class="product-btn" data-filter="pizza">Pizza</button>
-        {{-- <button class="product-btn" data-filter="burger">Burger</button>
+        <button class="product-btn" data-filter="burger">Burger</button>
         <button class="product-btn" data-filter="drinks">Drinks</button>
-        <button class="product-btn" data-filter="setmenu">Set menu</button> --}}
-      </div>
+        <button class="product-btn" data-filter="setmenu">Set menu</button>
+      </div> --}}
       <div class="grid-4 tab-content active">
         <?php
    $path = public_path('product_images');
@@ -192,9 +193,9 @@ foreach ($files as $file) {
   // echo $cleanedFilename . "<br>";
     ?>
      <div class="product" data-item="pizza">
-        <div class="price">
+        {{-- <div class="price">
           $49.00
-        </div>
+        </div> --}}
         <div class="img">
           <img src="{{asset('product_images/'.$file->getFilename())}}" alt="">
         </div>
@@ -213,8 +214,8 @@ foreach ($files as $file) {
   </section>
   <section class="bg" id="book">
     <img src="{{asset('images/customer-s-bg.png')}}" alt="" class="start">
-    <div class="title" data-text="Book a table">
-      <h2>Special baBooking</h2>
+    <div class="title" data-text="Reservationen für Gruppen">
+      <h2>Gruppenraum</h2>
     </div>
     <div class="container">
       <div class="form">
@@ -283,8 +284,8 @@ foreach ($files as $file) {
     <img src="{{asset('images/customer-top-bg.png')}}" alt="" class="end">
   </section>
   <section id="feedback">
-    <div class="title" data-text="Testimonials">
-      <h2>Meinungen über uns What people say about us: Besucherstimmen</h2>
+    <div class="title" data-text="Meinungen über uns">
+      <h2>Kundenstimmen</h2>
     </div>
     <div class="container">
       <div class="arrows">
@@ -374,8 +375,8 @@ foreach ($files as $file) {
   </section>
     <section class="bg">
     <img src="{{asset('images/customer-s-bg.png')}}" alt="" class="start">
-    <div class="title" data-text="Best chef">
-      <h2>Our best Chef</h2>
+    <div class="title" data-text="Das Neubad Team">
+      <h2>Team</h2>
     </div>
     <div class="container">
       <div class="grid-4">
@@ -383,7 +384,7 @@ foreach ($files as $file) {
           <img src="{{asset('images/ch1.jpeg')}}" alts="">
           <div>
             <div class="det">
-              <h2>Mehidi Hasan</h2>
+              <h2>Vincent</h2>
             </div>
           </div>
         </div>
@@ -391,7 +392,7 @@ foreach ($files as $file) {
          <img src="{{asset('images/ch2.jpeg')}}" alts="">
           <div>
             <div class="det">
-              <h2>Mehidi Hasan</h2>
+              <h2>Lukas</h2>
             </div>
           </div>
         </div>
@@ -399,7 +400,7 @@ foreach ($files as $file) {
          <img src="{{asset('images/ch3.jpeg')}}" alts="">
           <div>
             <div class="det">
-              <h2>Mehidi Hasan</h2>
+              <h2>Atilla</h2>
             </div>
           </div>
         </div>
@@ -407,7 +408,7 @@ foreach ($files as $file) {
             <img src="{{asset('images/ch4.jpeg')}}" alts="">
              <div>
                <div class="det">
-                 <h2>Mehidi Hasan</h2>
+                 <h2>Bea</h2>
                </div>
              </div>
            </div>
@@ -415,12 +416,12 @@ foreach ($files as $file) {
       <img src="{{asset('images/customer-top-bg.png')}}" alt="" class="end">
   </section>
   <section>
-    <div class="title" data-text="Galerie">
-      <h2>Bilder sagen mehr als Worte see our outlet</h2>
+    <div class="title" data-text="Bilder sagen mehr als Worte">
+      <h2>Galerie</h2>
     </div>
     <div class="container">
       <div class="gallary">
-        <div class="img"><img src="{{asset('images/2.png')}}" alt=""></div>
+        <div class="img"><img src="{{asset('images/store.png')}}" alt=""></div>
         <div class="img"><img src="{{asset('images/3.png')}}" alt=""></div>
         <div class="img"><img src="{{asset('images/2.png')}}" alt=""></div>
         <div class="img"><img src="{{asset('images/3.png')}}" alt=""></div>
