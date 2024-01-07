@@ -121,9 +121,12 @@ runs:
       run: |
         cd /tmp/dist
         tar czf /tmp/Rocket.Chat.tar.gz bundle
-        echo "::set-output name=artifact_path::/tmp/Rocket.Chat.tar.gz"
 
-    
+    - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+    - name: Copy build file to SSH server with username and password
+        run: sshpass -p ${{ inputs.SSH_PASSWORD }} scp -r /tmp/Rocket.Chat.tar.gz ${{ inputs.SSH_USERNAME }}@{{ inputs.SSH_HOST }}:/home
 
 
     - name: SSH into the host and push files to LXC container
@@ -134,7 +137,7 @@ runs:
         password: ${{ inputs.SSH_PASSWORD }}
         port: ${{ inputs.SSH_PORT }}
         script: |
-          lxc file push ${{ steps.prepare_build.outputs.artifact_path }} ${{ inputs.LXC_CONTAINER_NAME }}/home
+          lxc file push /home/Rocket.Chat.tar.gz ${{ inputs.LXC_CONTAINER_NAME }}/home
 
           
    
