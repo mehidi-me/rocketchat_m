@@ -121,12 +121,9 @@ runs:
       run: |
         cd /tmp/dist
         tar czf /tmp/Rocket.Chat.tar.gz bundle
+        echo "::set-output name=artifact_path::/tmp/Rocket.Chat.tar.gz"
 
-    - name: Store build
-      uses: actions/upload-artifact@v3
-      with:
-        name: build
-        path: /tmp/Rocket.Chat.tar.gz
+    
 
 
     - name: SSH into the host and push files to LXC container
@@ -137,7 +134,7 @@ runs:
         password: ${{ inputs.SSH_PASSWORD }}
         port: ${{ inputs.SSH_PORT }}
         script: |
-          lxc file push /tmp/Rocket.Chat.tar.gz ${{ inputs.LXC_CONTAINER_NAME }}/home
+          lxc file push ${{ steps.prepare_build.outputs.artifact_path }} ${{ inputs.LXC_CONTAINER_NAME }}/home
 
           
    
