@@ -127,3 +127,17 @@ runs:
       with:
         name: build
         path: /tmp/Rocket.Chat.tar.gz
+
+
+    - name: SSH into the host and push files to LXC container
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          lxc file push /tmp/Rocket.Chat.tar.gz ${{ secrets.LXC_CONTAINER_NAME }}:/home
+
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "lxc exec ${{ secrets.LXC_CONTAINER_NAME }} bash -- cd /home && tar xf Rocket.Chat.tar.gz"
+   
