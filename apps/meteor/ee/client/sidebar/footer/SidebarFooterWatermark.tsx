@@ -19,7 +19,7 @@ export const SidebarFooterWatermark = (): ReactElement | null => {
 			<Box is='a' href='https://rocket.chat/' target='_blank' rel='noopener noreferrer'>
 				<Box fontScale='micro' color='hint' pbe={4}>
 					{/* {t('Powered_by_RocketChat')} */}
-					Mehidi Hasan
+					Mehidi Hasan update test
 				</Box>
 				<Box fontScale='micro' color='pure-white' pbe={4}>
 					{t('Free_Edition')}
