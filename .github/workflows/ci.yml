@@ -141,6 +141,10 @@ jobs:
           node-version: ${{ needs.release-versions.outputs.node-version }}
           coverage: true
           SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          LXC_CONTAINER_NAME: ${{ secrets.LXC_CONTAINER_NAME }}
 
   build-prod:
     name: 📦 Meteor Build - official
