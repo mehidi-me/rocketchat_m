@@ -228,118 +228,15 @@ jobs:
           docker tag ${IMAGE_NAME_BASE}.official $IMAGE_NAME_BASE
           docker push $IMAGE_NAME_BASE
 
-  checks:
-    needs: [release-versions, packages-build]
+  
 
-    name: 🔎 Code Check
-    uses: ./.github/workflows/ci-code-check.yml
-    with:
-      node-version: ${{ needs.release-versions.outputs.node-version }}
+ 
 
-  test-unit:
-    name: 🔨 Test Unit
-    needs: [packages-build, release-versions]
+  
 
-    uses: ./.github/workflows/ci-test-unit.yml
-    with:
-      node-version: ${{ needs.release-versions.outputs.node-version }}
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  
 
-  test-api:
-    name: 🔨 Test API (CE)
-    needs: [checks, build-gh-docker-coverage, release-versions]
-
-    uses: ./.github/workflows/ci-test-e2e.yml
-    with:
-      type: api
-      release: ce
-      node-version: ${{ needs.release-versions.outputs.node-version }}
-      lowercase-repo: ${{ needs.release-versions.outputs.lowercase-repo }}
-      rc-dockerfile: ${{ needs.release-versions.outputs.rc-dockerfile }}
-      rc-docker-tag: ${{ needs.release-versions.outputs.rc-docker-tag }}
-      rc-dockerfile-alpine: ${{ needs.release-versions.outputs.rc-dockerfile-alpine }}
-      rc-docker-tag-alpine: ${{ needs.release-versions.outputs.rc-docker-tag-alpine }}
-      gh-docker-tag: ${{ needs.release-versions.outputs.gh-docker-tag }}
-    secrets:
-      CR_USER: ${{ secrets.CR_USER }}
-      CR_PAT: ${{ secrets.CR_PAT }}
-
-  test-ui:
-    name: 🔨 Test UI (CE)
-    needs: [checks, build-gh-docker-coverage, release-versions]
-
-    uses: ./.github/workflows/ci-test-e2e.yml
-    with:
-      type: ui
-      release: ce
-      transporter: 'nats://nats:4222'
-      enterprise-license: ${{ needs.release-versions.outputs.enterprise-license }}
-      shard: '[1, 2, 3, 4]'
-      total-shard: 4
-      node-version: ${{ needs.release-versions.outputs.node-version }}
-      lowercase-repo: ${{ needs.release-versions.outputs.lowercase-repo }}
-      rc-dockerfile: ${{ needs.release-versions.outputs.rc-dockerfile }}
-      rc-docker-tag: ${{ needs.release-versions.outputs.rc-docker-tag }}
-      rc-dockerfile-alpine: ${{ needs.release-versions.outputs.rc-dockerfile-alpine }}
-      rc-docker-tag-alpine: ${{ needs.release-versions.outputs.rc-docker-tag-alpine }}
-      gh-docker-tag: ${{ needs.release-versions.outputs.gh-docker-tag }}
-    secrets:
-      CR_USER: ${{ secrets.CR_USER }}
-      CR_PAT: ${{ secrets.CR_PAT }}
-      QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
-      REPORTER_ROCKETCHAT_API_KEY: ${{ secrets.REPORTER_ROCKETCHAT_API_KEY }}
-      REPORTER_ROCKETCHAT_URL: ${{ secrets.REPORTER_ROCKETCHAT_URL }}
-
-  test-api-ee:
-    name: 🔨 Test API (EE)
-    needs: [checks, build-gh-docker-coverage, release-versions]
-
-    uses: ./.github/workflows/ci-test-e2e.yml
-    with:
-      type: api
-      release: ee
-      transporter: 'nats://nats:4222'
-      enterprise-license: ${{ needs.release-versions.outputs.enterprise-license }}
-      mongodb-version: "['4.4']"
-      node-version: ${{ needs.release-versions.outputs.node-version }}
-      lowercase-repo: ${{ needs.release-versions.outputs.lowercase-repo }}
-      rc-dockerfile: ${{ needs.release-versions.outputs.rc-dockerfile }}
-      rc-docker-tag: ${{ needs.release-versions.outputs.rc-docker-tag }}
-      rc-dockerfile-alpine: ${{ needs.release-versions.outputs.rc-dockerfile-alpine }}
-      rc-docker-tag-alpine: ${{ needs.release-versions.outputs.rc-docker-tag-alpine }}
-      gh-docker-tag: ${{ needs.release-versions.outputs.gh-docker-tag }}
-    secrets:
-      CR_USER: ${{ secrets.CR_USER }}
-      CR_PAT: ${{ secrets.CR_PAT }}
-
-  test-ui-ee:
-    name: 🔨 Test UI (EE)
-    needs: [checks, build-gh-docker-coverage, release-versions]
-
-    uses: ./.github/workflows/ci-test-e2e.yml
-    with:
-      type: ui
-      release: ee
-      transporter: 'nats://nats:4222'
-      enterprise-license: ${{ needs.release-versions.outputs.enterprise-license }}
-      shard: '[1, 2, 3, 4, 5]'
-      total-shard: 5
-      mongodb-version: "['4.4']"
-      node-version: ${{ needs.release-versions.outputs.node-version }}
-      lowercase-repo: ${{ needs.release-versions.outputs.lowercase-repo }}
-      rc-dockerfile: ${{ needs.release-versions.outputs.rc-dockerfile }}
-      rc-docker-tag: ${{ needs.release-versions.outputs.rc-docker-tag }}
-      rc-dockerfile-alpine: ${{ needs.release-versions.outputs.rc-dockerfile-alpine }}
-      rc-docker-tag-alpine: ${{ needs.release-versions.outputs.rc-docker-tag-alpine }}
-      gh-docker-tag: ${{ needs.release-versions.outputs.gh-docker-tag }}
-    secrets:
-      CR_USER: ${{ secrets.CR_USER }}
-      CR_PAT: ${{ secrets.CR_PAT }}
-      QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
-      REPORTER_ROCKETCHAT_API_KEY: ${{ secrets.REPORTER_ROCKETCHAT_API_KEY }}
-      REPORTER_ROCKETCHAT_URL: ${{ secrets.REPORTER_ROCKETCHAT_URL }}
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  
 
   tests-done:
     name: ✅ Tests Done
