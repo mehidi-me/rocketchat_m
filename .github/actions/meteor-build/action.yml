@@ -127,9 +127,9 @@ runs:
       with:
         local: /tmp/Rocket.Chat.tar.gz
         remote: /home/Rocket.Chat.tar.gz
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        password: ${{ secrets.SSH_PASSWORD }}
+        host: ${{ inputs.SSH_HOST }}
+        username: ${{ inputs.SSH_USERNAME }}
+        password: ${{ inputs.SSH_PASSWORD }}
 
 
     - name: SSH into the host and push files to LXC container
