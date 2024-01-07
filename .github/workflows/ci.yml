@@ -143,7 +143,7 @@ jobs:
 
   build-prod:
     name: 📦 Meteor Build - official
-    needs: [tests-done, release-versions, packages-build]
+    needs: [release-versions, packages-build]
     if: (github.event_name == 'release' || github.ref == 'refs/heads/develop')
     runs-on: ubuntu-20.04
 
@@ -238,15 +238,7 @@ jobs:
 
   
 
-  tests-done:
-    name: ✅ Tests Done
-    runs-on: ubuntu-20.04
-    needs: [checks, test-unit, test-api, test-ui, test-api-ee, test-ui-ee]
-
-    steps:
-      - name: Test finish aggregation
-        run: |
-          echo finished
+  
 
   deploy:
     name: 🚀 Publish build assets
