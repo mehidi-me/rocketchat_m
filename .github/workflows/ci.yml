@@ -1,13 +1,9 @@
 name: CI
 
 on:
-  release:
-    types: [published]
-  pull_request:
-    branches: '**'
   push:
     branches:
-      - develop
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
