@@ -11,8 +11,8 @@ const HomePage = (): ReactElement => {
 		KonchatNotification.getDesktopPermission();
 	}, []);
 
-	const customOnly = useSetting('Layout_Custom_Body_Only');
-
+	// const customOnly = useSetting('Layout_Custom_Body_Only');
+	const customOnly = true;
 	if (customOnly) {
 		return <CustomHomePage />;
 	}
