@@ -34,62 +34,61 @@ export const ResetPasswordForm = ({ setLoginRoute }: { setLoginRoute: DispatchLo
 			</Form.Header>
 
 			{sent ? (
-					<FieldGroup>
-						<Callout role='status' mbs={24} icon='mail'>
-						Check your email, password has been sent.. 
-						</Callout>
-					</FieldGroup>
-				) : (
-					<>
-					<Form.Container>
 				<FieldGroup>
-					<Field>
-						<Field.Label htmlFor='email'>{t('registration.component.form.email')}</Field.Label>
-						<Field.Row>
-							<TextInput
-								{...register('email', {
-									required: true,
-									pattern: {
-										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-										message: t('registration.page.resetPassword.errors.invalidEmail'),
-									},
-								})}
-								error={errors.email && (errors.email?.message || t('registration.component.form.requiredField'))}
-								aria-invalid={Boolean(errors.email)}
-								placeholder={t('registration.component.form.emailPlaceholder')}
-								name='email'
-								id='email'
-							/>
-						</Field.Row>
-						{errors.email && <Field.Error>{errors.email.message || t('registration.component.form.requiredField')}</Field.Error>}
-					</Field>
+					<Callout role='status' mbs={24} icon='mail'>
+						Check your email, password has been sent..
+					</Callout>
 				</FieldGroup>
-				{sent && (
+			) : (
+				<>
+					<Form.Container>
+						<FieldGroup>
+							<Field>
+								<Field.Label htmlFor='email'>{t('registration.component.form.email')}</Field.Label>
+								<Field.Row>
+									<TextInput
+										{...register('email', {
+											required: true,
+											pattern: {
+												value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+												message: t('registration.page.resetPassword.errors.invalidEmail'),
+											},
+										})}
+										error={errors.email && (errors.email?.message || t('registration.component.form.requiredField'))}
+										aria-invalid={Boolean(errors.email)}
+										placeholder={t('registration.component.form.emailPlaceholder')}
+										name='email'
+										id='email'
+									/>
+								</Field.Row>
+								{errors.email && <Field.Error>{errors.email.message || t('registration.component.form.requiredField')}</Field.Error>}
+							</Field>
+						</FieldGroup>
+						{/* {sent && (
 					<FieldGroup>
 						<Callout role='status' mbs={24} icon='mail'>
 							{t('registration.page.resetPassword.sent')}
 						</Callout>
 					</FieldGroup>
-				)}
-			</Form.Container>
-			<Form.Footer>
-				<ButtonGroup>
-					<Button type='submit' disabled={isSubmitting} primary>
-						{t('registration.page.resetPassword.sendInstructions')}
-					</Button>
-				</ButtonGroup>
+				)} */}
+					</Form.Container>
+					<Form.Footer>
+						<ButtonGroup>
+							<Button type='submit' disabled={isSubmitting} primary>
+								{t('registration.page.resetPassword.sendInstructions')}
+							</Button>
+						</ButtonGroup>
 
-				<ActionLink
-					onClick={(): void => {
-						setLoginRoute('login');
-					}}
-				>
-					{t('registration.page.register.back')}
-				</ActionLink>
-			</Form.Footer>
-					</>
-				)}
-			
+						<ActionLink
+							onClick={(): void => {
+								setLoginRoute('login');
+							}}
+						>
+							{t('registration.page.register.back')}
+						</ActionLink>
+					</Form.Footer>
+				</>
+			)}
 		</Form>
 	);
 };
