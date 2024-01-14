@@ -5847,7 +5847,7 @@
   "registration.component.form.divider": "or",
   "registration.component.form.submit": "Submit",
   "registration.component.form.requiredField": "This field is required",
-  "registration.component.form.joinYourTeam": "Join your team",
+  "registration.component.form.joinYourTeam": "Join your community",
   "registration.component.form.reasonToJoin": "Reason to Join",
   "registration.component.form.invalidConfirmPass": "The password confirmation does not match password",
   "registration.component.form.confirmPassword": "Confirm your password",
