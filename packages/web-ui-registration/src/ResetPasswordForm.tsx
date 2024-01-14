@@ -32,7 +32,16 @@ export const ResetPasswordForm = ({ setLoginRoute }: { setLoginRoute: DispatchLo
 			<Form.Header>
 				<Form.Title>{t('registration.component.resetPassword')}</Form.Title>
 			</Form.Header>
-			<Form.Container>
+
+			{sent ? (
+					<FieldGroup>
+						<Callout role='status' mbs={24} icon='mail'>
+						Check your email, password has been sent.. 
+						</Callout>
+					</FieldGroup>
+				) : (
+					<>
+					<Form.Container>
 				<FieldGroup>
 					<Field>
 						<Field.Label htmlFor='email'>{t('registration.component.form.email')}</Field.Label>
@@ -78,6 +87,9 @@ export const ResetPasswordForm = ({ setLoginRoute }: { setLoginRoute: DispatchLo
 					{t('registration.page.register.back')}
 				</ActionLink>
 			</Form.Footer>
+					</>
+				)}
+			
 		</Form>
 	);
 };
