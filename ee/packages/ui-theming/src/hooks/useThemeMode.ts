@@ -26,9 +26,6 @@ export const useThemeMode = (): [ThemeMode, (value: ThemeMode) => () => void, Th
 	const setTheme = useCallback((value: ThemeMode): (() => void) => updaters[value], [updaters]);
 
 	const useTheme = () => {
-		if (themeMode === 'auto') {
-			return 'light';
-		}
 		if (useDarkMode(themeMode === 'dark')) {
 			return 'dark';
 		}
