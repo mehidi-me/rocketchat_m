@@ -34,4 +34,26 @@ export class HomeChannel {
 		await expect(this.page.locator('role=main >> .rcx-skeleton')).toHaveCount(0);
 		await expect(this.page.locator('role=main >> role=list')).not.toHaveAttribute('aria-busy', 'true');
 	}
+
+	async dismissToast() {
+		// this is a workaround for when the toast is blocking the click of the button
+		await this.toastSuccess.locator('button >> i.rcx-icon--name-cross.rcx-icon').click();
+		await this.page.mouse.move(0, 0);
+	}
+
+	get composerToolbar(): Locator {
+		return this.page.locator('[role=toolbar][aria-label="Composer Primary Actions"]');
+	}
+
+	get composerToolbarActions(): Locator {
+		return this.page.locator('[role=toolbar][aria-label="Composer Primary Actions"] button');
+	}
+
+	get roomHeaderFavoriteBtn(): Locator {
+		return this.page.getByRole('button', { name: 'Favorite' });
+	}
+
+	get roomHeaderToolbar(): Locator {
+		return this.page.locator('[role=toolbar][aria-label="Primary Room actions"]');
+	}
 }
