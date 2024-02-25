@@ -67,6 +67,14 @@ yarn dsv # run only meteor (front and back) with pre-built packages
 
 After initialized, you can access the server at http://localhost:3000
 
+# Gitpod Setup
+
+1. Click the button below to open this project in Gitpod.
+
+2. This will open a fully configured workspace in your browser with all the necessary dependencies already installed.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/RocketChat/Rocket.Chat)
+
 **Starting Rocket.Chat in microservices mode:**
 
 ```bash
@@ -133,6 +141,3 @@ We're hiring developers, support people, and product managers all the time. Plea
 ## 🗒️ Credits
 
 - Emoji provided graciously by [JoyPixels](https://www.joypixels.com).
-# rocketchat_m
-# rocketchat_m
-# rocketchat_m

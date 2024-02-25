@@ -1,6 +1,19 @@
-import { FieldGroup, TextInput, Field, PasswordInput, ButtonGroup, Button, Callout } from '@rocket.chat/fuselage';
+import {
+	FieldGroup,
+	TextInput,
+	Field,
+	FieldLabel,
+	FieldRow,
+	FieldError,
+	FieldLink,
+	PasswordInput,
+	ButtonGroup,
+	Button,
+	Callout,
+} from '@rocket.chat/fuselage';
 import { useUniqueId } from '@rocket.chat/fuselage-hooks';
 import { Form, ActionLink } from '@rocket.chat/layout';
+import { useDocumentTitle } from '@rocket.chat/ui-client';
 import { useLoginWithPassword, useSetting } from '@rocket.chat/ui-contexts';
 import { useMutation } from '@tanstack/react-query';
 import type { ReactElement } from 'react';
@@ -67,6 +80,8 @@ export const LoginForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRoute
 	const usernameOrEmailPlaceholder = String(useSetting('Accounts_EmailOrUsernamePlaceholder'));
 	const passwordPlaceholder = String(useSetting('Accounts_PasswordPlaceholder'));
 
+	useDocumentTitle(t('registration.component.login'), false);
+
 	const loginMutation = useMutation({
 		mutationFn: (formData: { username: string; password: string }) => {
 			return login(formData.username, formData.password);
@@ -124,10 +139,10 @@ export const LoginForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRoute
 					<Form.Container>
 						<FieldGroup disabled={loginMutation.isLoading}>
 							<Field>
-								<Field.Label required htmlFor={usernameId}>
+								<FieldLabel required htmlFor={usernameId}>
 									{t('registration.component.form.emailOrUsername')}
-								</Field.Label>
-								<Field.Row>
+								</FieldLabel>
+								<FieldRow>
 									<TextInput
 										{...register('username', {
 											required: t('registration.component.form.requiredField'),
@@ -138,18 +153,18 @@ export const LoginForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRoute
 										aria-describedby={`${usernameId}-error`}
 										id={usernameId}
 									/>
-								</Field.Row>
+								</FieldRow>
 								{errors.username && (
-									<Field.Error aria-live='assertive' id={`${usernameId}-error`}>
+									<FieldError aria-live='assertive' id={`${usernameId}-error`}>
 										{errors.username.message}
-									</Field.Error>
+									</FieldError>
 								)}
 							</Field>
 							<Field>
-								<Field.Label required htmlFor={passwordId}>
+								<FieldLabel required htmlFor={passwordId}>
 									{t('registration.component.form.password')}
-								</Field.Label>
-								<Field.Row>
+								</FieldLabel>
+								<FieldRow>
 									<PasswordInput
 										{...register('password', {
 											required: t('registration.component.form.requiredField'),
@@ -160,15 +175,15 @@ export const LoginForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRoute
 										aria-describedby={`${passwordId}-error`}
 										id={passwordId}
 									/>
-								</Field.Row>
+								</FieldRow>
 								{errors.password && (
-									<Field.Error aria-live='assertive' id={`${passwordId}-error`}>
+									<FieldError aria-live='assertive' id={`${passwordId}-error`}>
 										{errors.password.message}
-									</Field.Error>
+									</FieldError>
 								)}
 								{isResetPasswordAllowed && (
-									<Field.Row justifyContent='end'>
-										<Field.Link
+									<FieldRow justifyContent='end'>
+										<FieldLink
 											href='#'
 											onClick={(e): void => {
 												e.preventDefault();
@@ -176,16 +191,16 @@ export const LoginForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRoute
 											}}
 										>
 											<Trans i18nKey='registration.page.login.forgot'>Forgot your password?</Trans>
-										</Field.Link>
-									</Field.Row>
+										</FieldLink>
+									</FieldRow>
 								)}
 							</Field>
 						</FieldGroup>
 						{errorOnSubmit && <FieldGroup disabled={loginMutation.isLoading}>{renderErrorOnSubmit(errorOnSubmit)}</FieldGroup>}
 					</Form.Container>
 					<Form.Footer>
-						<ButtonGroup stretch>
-							<Button disabled={loginMutation.isLoading} type='submit' primary>
+						<ButtonGroup>
+							<Button loading={loginMutation.isLoading} type='submit' primary>
 								{t('registration.component.login')}
 							</Button>
 						</ButtonGroup>
