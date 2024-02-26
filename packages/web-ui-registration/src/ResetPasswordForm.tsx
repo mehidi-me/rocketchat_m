@@ -47,44 +47,47 @@ export const ResetPasswordForm = ({ setLoginRoute }: { setLoginRoute: DispatchLo
 			<Form.Header>
 				<Form.Title id={formLabelId}>{t('registration.component.resetPassword')}</Form.Title>
 			</Form.Header>
-			<Form.Container>
+			{isSuccess ? (
 				<FieldGroup>
-					<Field>
-						<FieldLabel required htmlFor={emailId}>
-							{t('registration.component.form.email')}
-						</FieldLabel>
-						<FieldRow>
-							<TextInput
-								{...register('email', {
-									required: t('registration.component.form.requiredField'),
-									pattern: {
-										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-										message: t('registration.page.resetPassword.errors.invalidEmail'),
-									},
-								})}
-								error={errors.email?.message}
-								aria-invalid={Boolean(errors.email)}
-								aria-required='true'
-								aria-describedby={`${emailId}-error`}
-								placeholder={t('registration.component.form.emailPlaceholder')}
-								id={emailId}
-							/>
-						</FieldRow>
-						{errors.email && (
-							<FieldError aria-live='assertive' id={`${emailId}-error`}>
-								{errors.email.message}
-							</FieldError>
-						)}
-					</Field>
+					<Callout aria-live='assertive' role='status' mbs={24} icon='mail'>
+						{/* {t('registration.page.resetPassword.sent')} */}
+						Check your email, password has been sent..
+					</Callout>
 				</FieldGroup>
-				{isSuccess && (
+			) : (
+				<Form.Container>
 					<FieldGroup>
-						<Callout aria-live='assertive' role='status' mbs={24} icon='mail'>
-							{t('registration.page.resetPassword.sent')}
-						</Callout>
+						<Field>
+							<FieldLabel required htmlFor={emailId}>
+								{t('registration.component.form.email')}
+							</FieldLabel>
+							<FieldRow>
+								<TextInput
+									{...register('email', {
+										required: t('registration.component.form.requiredField'),
+										pattern: {
+											value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+											message: t('registration.page.resetPassword.errors.invalidEmail'),
+										},
+									})}
+									error={errors.email?.message}
+									aria-invalid={Boolean(errors.email)}
+									aria-required='true'
+									aria-describedby={`${emailId}-error`}
+									placeholder={t('registration.component.form.emailPlaceholder')}
+									id={emailId}
+								/>
+							</FieldRow>
+							{errors.email && (
+								<FieldError aria-live='assertive' id={`${emailId}-error`}>
+									{errors.email.message}
+								</FieldError>
+							)}
+						</Field>
 					</FieldGroup>
-				)}
-			</Form.Container>
+				</Form.Container>
+			)}
+
 			<Form.Footer>
 				<ButtonGroup>
 					<Button type='submit' loading={isSubmitting} primary>
