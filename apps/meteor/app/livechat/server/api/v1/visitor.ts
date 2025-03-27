@@ -1,4 +1,4 @@
-import type { ILivechatVisitor, IRoom } from '@rocket.chat/core-typings';
+import type { IRoom } from '@rocket.chat/core-typings';
 import { LivechatVisitors as VisitorsRaw, LivechatCustomField, LivechatRooms } from '@rocket.chat/models';
 import { Match, check } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
@@ -7,50 +7,62 @@ import { callbacks } from '../../../../../lib/callbacks';
 import { API } from '../../../../api/server';
 import { settings } from '../../../../settings/server';
 import { Livechat as LivechatTyped } from '../../lib/LivechatTyped';
+import { validateRequiredCustomFields } from '../../lib/validateRequiredCustomFields';
 import { findGuest, normalizeHttpHeaderData } from '../lib/livechat';
 
-API.v1.addRoute('livechat/visitor', {
-	async post() {
-		check(this.bodyParams, {
-			visitor: Match.ObjectIncluding({
-				token: String,
-				name: Match.Maybe(String),
-				email: Match.Maybe(String),
-				department: Match.Maybe(String),
-				phone: Match.Maybe(String),
-				username: Match.Maybe(String),
-				customFields: Match.Maybe([
-					Match.ObjectIncluding({
-						key: String,
-						value: String,
-						overwrite: Boolean,
-					}),
-				]),
-			}),
-		});
+API.v1.addRoute(
+	'livechat/visitor',
+	{
+		rateLimiterOptions: {
+			numRequestsAllowed: 5,
+			intervalTimeInMS: 60000,
+		},
+	},
+	{
+		async post() {
+			check(this.bodyParams, {
+				visitor: Match.ObjectIncluding({
+					token: String,
+					name: Match.Maybe(String),
+					email: Match.Maybe(String),
+					department: Match.Maybe(String),
+					phone: Match.Maybe(String),
+					username: Match.Maybe(String),
+					customFields: Match.Maybe([
+						Match.ObjectIncluding({
+							key: String,
+							value: String,
+							overwrite: Boolean,
+						}),
+					]),
+				}),
+			});
 
-		const { customFields, id, token, name, email, department, phone, username, connectionData } = this.bodyParams.visitor;
+			const { customFields, id, token, name, email, department, phone, username, connectionData } = this.bodyParams.visitor;
 
-		if (!token?.trim()) {
-			throw new Meteor.Error('error-invalid-token', 'Token cannot be empty', { method: 'livechat/visitor' });
-		}
+			if (!token?.trim()) {
+				throw new Meteor.Error('error-invalid-token', 'Token cannot be empty', { method: 'livechat/visitor' });
+			}
 
-		const guest = {
-			token,
-			...(id && { id }),
-			...(name && { name }),
-			...(email && { email }),
-			...(department && { department }),
-			...(username && { username }),
-			...(connectionData && { connectionData }),
-			...(phone && typeof phone === 'string' && { phone: { number: phone as string } }),
-			connectionData: normalizeHttpHeaderData(this.request.headers),
-		};
+			const guest = {
+				token,
+				...(id && { id }),
+				...(name && { name }),
+				...(email && { email }),
+				...(department && { department }),
+				...(username && { username }),
+				...(connectionData && { connectionData }),
+				...(phone && typeof phone === 'string' && { phone: { number: phone as string } }),
+				connectionData: normalizeHttpHeaderData(this.request.headers),
+			};
 
-		const visitorId = await LivechatTyped.registerGuest(guest);
+			const visitor = await LivechatTyped.registerGuest(guest);
+			if (!visitor) {
+				throw new Meteor.Error('error-livechat-visitor-registration', 'Error registering visitor', {
+					method: 'livechat/visitor',
+				});
+			}
 
-		let visitor: ILivechatVisitor | null = await VisitorsRaw.findOneEnabledById(visitorId, {});
-		if (visitor) {
 			const extraQuery = await callbacks.run('livechat.applyRoomRestrictions', {});
 			// If it's updating an existing visitor, it must also update the roomInfo
 			const rooms = await LivechatRooms.findOpenByVisitorToken(visitor?.token, {}, extraQuery).toArray();
@@ -66,30 +78,64 @@ API.v1.addRoute('livechat/visitor', {
 						}),
 				),
 			);
-		}
 
-		if (customFields && Array.isArray(customFields)) {
-			for await (const field of customFields) {
-				const customField = await LivechatCustomField.findOneById(field.key);
-				if (!customField) {
-					continue;
+			if (customFields && Array.isArray(customFields) && customFields.length > 0) {
+				const errors: string[] = [];
+				const keys = customFields.map((field) => field.key);
+
+				const livechatCustomFields = await LivechatCustomField.findByScope(
+					'visitor',
+					{ projection: { _id: 1, required: 1 } },
+					false,
+				).toArray();
+				validateRequiredCustomFields(keys, livechatCustomFields);
+
+				const matchingCustomFields = livechatCustomFields.filter((field) => keys.includes(field._id));
+				const processedKeys = await Promise.all(
+					matchingCustomFields.map(async (field) => {
+						const customField = customFields.find((f) => f.key === field._id);
+						if (!customField) {
+							return;
+						}
+
+						const { key, value, overwrite } = customField;
+						// TODO: Change this to Bulk update
+						if (!(await VisitorsRaw.updateLivechatDataByToken(token, key, value, overwrite))) {
+							errors.push(key);
+						}
+
+						return key;
+					}),
+				);
+
+				if (processedKeys.length !== keys.length) {
+					LivechatTyped.logger.warn({
+						msg: 'Some custom fields were not processed',
+						visitorId: visitor._id,
+						missingKeys: keys.filter((key) => !processedKeys.includes(key)),
+					});
 				}
-				const { key, value, overwrite } = field;
-				if (customField.scope === 'visitor' && !(await VisitorsRaw.updateLivechatDataByToken(token, key, value, overwrite))) {
-					return API.v1.failure();
+
+				if (errors.length > 0) {
+					LivechatTyped.logger.error({
+						msg: 'Error updating custom fields',
+						visitorId: visitor._id,
+						errors,
+					});
+					throw new Error('error-updating-custom-fields');
 				}
+
+				return API.v1.success({ visitor: await VisitorsRaw.findOneEnabledById(visitor._id) });
 			}
 
-			visitor = await VisitorsRaw.findOneEnabledById(visitorId, {});
-		}
+			if (!visitor) {
+				throw new Meteor.Error('error-saving-visitor', 'An error ocurred while saving visitor');
+			}
 
-		if (!visitor) {
-			throw new Meteor.Error('error-saving-visitor', 'An error ocurred while saving visitor');
-		}
-
-		return API.v1.success({ visitor });
+			return API.v1.success({ visitor });
+		},
 	},
-});
+);
 
 API.v1.addRoute('livechat/visitor/:token', {
 	async get() {

@@ -1,6 +1,6 @@
+import type { ThemePreference as ThemeMode, Themes } from '@rocket.chat/core-typings';
 import { useDarkMode } from '@rocket.chat/fuselage-hooks';
 import { useEndpoint, useUserPreference } from '@rocket.chat/ui-contexts';
-import type { ThemePreference as ThemeMode, Themes } from '@rocket.chat/ui-theming/src/types/themes';
 import { useCallback, useState } from 'react';
 
 /**
@@ -26,7 +26,7 @@ export const useThemeMode = (): [ThemeMode, (value: ThemeMode) => () => void, Th
 	const setTheme = useCallback((value: ThemeMode): (() => void) => updaters[value], [updaters]);
 
 	const useTheme = () => {
-		if (useDarkMode(themeMode === 'dark')) {
+		if (useDarkMode(themeMode === 'auto' ? undefined : themeMode === 'dark')) {
 			return 'dark';
 		}
 		if (themeMode === 'high-contrast') {

@@ -1,4 +1,5 @@
 import type { IMessage } from '@rocket.chat/core-typings';
+import type { KeyboardEvent, MouseEvent, RefObject } from 'react';
 import { createContext, useContext } from 'react';
 
 export type MessageListContextValue = {
@@ -7,16 +8,15 @@ export type MessageListContextValue = {
 	useShowFollowing: ({ message }: { message: IMessage }) => boolean;
 	useMessageDateFormatter: () => (date: Date) => string;
 	useUserHasReacted: (message: IMessage) => (reaction: string) => boolean;
-	useOpenEmojiPicker: (message: IMessage) => (event: React.MouseEvent) => void;
+	useOpenEmojiPicker: (message: IMessage) => (event: MouseEvent | KeyboardEvent) => void;
 	showRoles: boolean;
 	showRealName: boolean;
 	showUsername: boolean;
-	highlights?:
-		| {
-				highlight: string;
-				regex: RegExp;
-				urlRegex: RegExp;
-		  }[];
+	highlights?: {
+		highlight: string;
+		regex: RegExp;
+		urlRegex: RegExp;
+	}[];
 	katex?: {
 		dollarSyntaxEnabled: boolean;
 		parenthesisSyntaxEnabled: boolean;
@@ -25,7 +25,7 @@ export type MessageListContextValue = {
 	showColors: boolean;
 	jumpToMessageParam?: string;
 	username: string | undefined;
-	scrollMessageList?: (callback: (wrapper: HTMLDivElement | null) => ScrollToOptions | void) => void;
+	messageListRef?: RefObject<HTMLElement>;
 };
 
 export const MessageListContext = createContext<MessageListContextValue>({
@@ -42,8 +42,8 @@ export const MessageListContext = createContext<MessageListContextValue>({
 	showRealName: false,
 	showUsername: false,
 	showColors: false,
-	scrollMessageList: () => undefined,
 	username: undefined,
+	messageListRef: { current: null },
 });
 
 export const useShowTranslated: MessageListContextValue['useShowTranslated'] = (...args) =>
@@ -60,9 +60,10 @@ export const useMessageListShowUsername = (): MessageListContextValue['showUsern
 export const useMessageListHighlights = (): MessageListContextValue['highlights'] => useContext(MessageListContext).highlights;
 export const useMessageListJumpToMessageParam = (): MessageListContextValue['jumpToMessageParam'] =>
 	useContext(MessageListContext).jumpToMessageParam;
-export const useMessageListScroll = (): MessageListContextValue['scrollMessageList'] => useContext(MessageListContext).scrollMessageList;
 
 export const useUserHasReacted: MessageListContextValue['useUserHasReacted'] = (message: IMessage) =>
 	useContext(MessageListContext).useUserHasReacted(message);
 export const useOpenEmojiPicker: MessageListContextValue['useOpenEmojiPicker'] = (...args) =>
 	useContext(MessageListContext).useOpenEmojiPicker(...args);
+
+export const useMessageListRef = (): MessageListContextValue['messageListRef'] => useContext(MessageListContext).messageListRef;
