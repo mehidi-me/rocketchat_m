@@ -141,3 +141,75 @@ We're hiring developers, support people, and product managers all the time. Plea
 ## 🗒️ Credits
 
 - Emoji provided graciously by [JoyPixels](https://www.joypixels.com).
+
+
+custome css
+
+.rcx-css-12zxucr::after{
+  content:' | Serving the Moroccan Community with Pride !';
+}
+
+.rcx-css-12zxucr span{
+  display: none;
+}
+
+.rcx-css-1boprc1{
+  display:none;
+}
+.rcx-css-4uwzj9{
+  width:30rem !important;
+}
+.rcx-css-grma{
+  min-height:5rem !important;
+}
+.rcx-css-13sr1uc{
+  min-height:5rem !important;
+}
+h3.rcx-box.rcx-box--full.rcx-css-1ln5v6k {
+    display: none;
+}
+h2.rcx-box.rcx-box--full.rcx-css-1dgu1qo {
+    display: none;
+}
+.rcx-css-gc3d7q {
+  display:none;
+}
+@media (min-width: 1440px){
+   .rcx-css-s3n4r5 {
+        flex-flow: column;
+    -webkit-box-align: center;
+    align-items: center;
+    padding-inline: 28px 16px;
+    width: 100%;
+    max-width: 1152px;
+}
+  .rcx-css-14gyq0r{
+        align-items: center;
+    flex: 1;
+    padding-inline: 0;
+  }
+  .rcx-css-3fow2g{
+        text-align: center;
+  }
+}
+.rcx-css-12gps4f{
+  display:none;
+}
+.rcx-css-1svuzur{
+background:#fff !important;  
+}
+.rcx-css-ogq2n4{
+  background: #404563 !important;
+}
+
+/* nav item title color */
+.rcx-sidebar-item__title,
+.rcx-css-god1vc{
+  color: #fff !important;
+}
+
+.rcx-sidebar-item--selected, .rcx-sidebar-item:active, .rcx-sidebar-item--clickable.hover, .rcx-sidebar-item--clickable.is-hovered, .rcx-sidebar-item--clickable:hover {
+    
+    background-color: #333 !important;
+}
+
