@@ -43,15 +43,19 @@ Free for 30 days. Afterward, choose between continuing to host on our secure clo
 
 [Start your cloud hosted trial now](https://rocket.chat/trial-saas)
 
+# 📖 Docs for Developers, Admins and Users
+Please make sure to visit our [Docs](https://docs.rocket.chat/) and [Developer Docs](https://developer.rocket.chat/docs) before sending questions. 
+
 # 🛠️ Local development
 
 ##  Prerequisites
 
 You can follow these instructions to setup a dev environment:
 
-- Install **Node 14.x (LTS)** either [manually](https://nodejs.org/dist/latest-v14.x/) or using a tool like [nvm](https://github.com/creationix/nvm) or [volta](https://volta.sh/) (recommended)
-- Install **Meteor** ([version here](apps/meteor/.meteor/release)): https://www.meteor.com/developers/install
+- Install **Node 22.x (LTS)** either [manually](https://nodejs.org/dist/latest-v22.x/) or using a tool like [nvm](https://github.com/creationix/nvm) or [volta](https://volta.sh/) (recommended)
+- Install **Meteor** ([version here](apps/meteor/.meteor/release)): https://docs.meteor.com/about/install.html
 - Install **yarn**: https://yarnpkg.com/getting-started/install
+- Install **Deno 1.x**: https://docs.deno.com/runtime/fundamentals/installation/
 - Clone this repo: `git clone https://github.com/RocketChat/Rocket.Chat.git`
 - Run `yarn` to install dependencies
 
@@ -66,6 +70,10 @@ yarn dsv # run only meteor (front and back) with pre-built packages
 ```
 
 After initialized, you can access the server at http://localhost:3000
+
+More details at: [Developer Docs](https://developer.rocket.chat/v1/docs/server-environment-setup)
+PS: For Windows you MUST use WSL2 and have +12Gb RAM
+
 
 # Gitpod Setup
 
@@ -83,7 +91,7 @@ yarn turbo run ms
 
 After initialized, you can access the server at http://localhost:4000
 
-> ⚠️ Check more detailed information in the [Rocket.Chat Environment Setup](https://developer.rocket.chat/rocket.chat/rocket-chat-environment-setup) guide
+> ⚠️ Check more detailed information in the [Rocket.Chat Environment Setup](https://developer.rocket.chat/docs/server-environment-setup) guide
 
 # 💻 Installation
 
@@ -141,75 +149,3 @@ We're hiring developers, support people, and product managers all the time. Plea
 ## 🗒️ Credits
 
 - Emoji provided graciously by [JoyPixels](https://www.joypixels.com).
-
-
-custome css
-
-.rcx-css-12zxucr::after{
-  content:' | Serving the Moroccan Community with Pride !';
-}
-
-.rcx-css-12zxucr span{
-  display: none;
-}
-
-.rcx-css-1boprc1{
-  display:none;
-}
-.rcx-css-4uwzj9{
-  width:30rem !important;
-}
-.rcx-css-grma{
-  min-height:5rem !important;
-}
-.rcx-css-13sr1uc{
-  min-height:5rem !important;
-}
-h3.rcx-box.rcx-box--full.rcx-css-1ln5v6k {
-    display: none;
-}
-h2.rcx-box.rcx-box--full.rcx-css-1dgu1qo {
-    display: none;
-}
-.rcx-css-gc3d7q {
-  display:none;
-}
-@media (min-width: 1440px){
-   .rcx-css-s3n4r5 {
-        flex-flow: column;
-    -webkit-box-align: center;
-    align-items: center;
-    padding-inline: 28px 16px;
-    width: 100%;
-    max-width: 1152px;
-}
-  .rcx-css-14gyq0r{
-        align-items: center;
-    flex: 1;
-    padding-inline: 0;
-  }
-  .rcx-css-3fow2g{
-        text-align: center;
-  }
-}
-.rcx-css-12gps4f{
-  display:none;
-}
-.rcx-css-1svuzur{
-background:#fff !important;  
-}
-.rcx-css-ogq2n4{
-  background: #404563 !important;
-}
-
-/* nav item title color */
-.rcx-sidebar-item__title,
-.rcx-css-god1vc{
-  color: #fff !important;
-}
-
-.rcx-sidebar-item--selected, .rcx-sidebar-item:active, .rcx-sidebar-item--clickable.hover, .rcx-sidebar-item--clickable.is-hovered, .rcx-sidebar-item--clickable:hover {
-    
-    background-color: #333 !important;
-}
-

@@ -21,61 +21,84 @@ test.describe.serial('settings-account-profile', () => {
 	test.describe('Profile', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/account/profile');
-		})
+		});
 
 		test.skip('expect update profile with new name/username', async () => {
 			const newName = faker.person.fullName();
 			const newUsername = faker.internet.userName({ firstName: newName });
-	
+
 			await poAccountProfile.inputName.fill(newName);
 			await poAccountProfile.inputUsername.fill(newUsername);
 			await poAccountProfile.btnSubmit.click();
 			await poAccountProfile.btnClose.click();
 			await poHomeChannel.sidenav.openChat('general');
 			await poHomeChannel.content.sendMessage('any_message');
-	
+
 			await expect(poHomeChannel.content.lastUserMessageNotSequential).toContainText(newUsername);
-	
+
 			await poHomeChannel.content.lastUserMessageNotSequential.locator('figure').click();
 			await poHomeChannel.content.linkUserCard.click();
-	
+
 			await expect(poHomeChannel.tabs.userInfoUsername).toHaveText(newUsername);
-		})
+		});
 
 		test.describe('Avatar', () => {
-			test('should change avatar image by uploading file', async () => {	
+			test('should change avatar image by uploading file', async () => {
 				await poAccountProfile.inputImageFile.setInputFiles('./tests/e2e/fixtures/files/test-image.jpeg');
 				await poAccountProfile.btnSubmit.click();
-			
+
 				await expect(poAccountProfile.userAvatarEditor).toHaveAttribute('src');
 			});
 
-			test('should change avatar image from url', async () => {	
+			test('should change avatar image from url', async () => {
 				await poAccountProfile.inputAvatarLink.fill('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50');
 				await poAccountProfile.btnSetAvatarLink.click();
-	
+
 				await poAccountProfile.btnSubmit.click();
 				await expect(poAccountProfile.userAvatarEditor).toHaveAttribute('src');
 			});
 
-			test('should display a skeleton if the image url is not valid', async () => {	
+			test('should display a skeleton if the image url is not valid', async () => {
 				await poAccountProfile.inputAvatarLink.fill('https://invalidUrl');
 				await poAccountProfile.btnSetAvatarLink.click();
-	
+
 				await poAccountProfile.btnSubmit.click();
 				await expect(poAccountProfile.userAvatarEditor).not.toHaveAttribute('src');
 			});
-		})
+		});
 	});
 
 	test.describe('Security', () => {
+		test.beforeEach(async ({ page }) => {
+			await page.goto('account/security');
+			await page.waitForSelector('.main-content');
+		});
+
 		test('should not have any accessibility violations', async ({ page, makeAxeBuilder }) => {
 			await page.goto('/account/security');
 
 			const results = await makeAxeBuilder().analyze();
 			expect(results.violations).toEqual([]);
-		})
-	})
+		});
+
+		test('expect to disable email 2FA', async () => {
+			await poAccountProfile.security2FASection.click();
+			await expect(poAccountProfile.disableEmail2FAButton).toBeVisible();
+			await poAccountProfile.disableEmail2FAButton.click();
+
+			await expect(poHomeChannel.toastSuccess).toBeVisible();
+			await expect(poAccountProfile.enableEmail2FAButton).toBeVisible();
+		});
+
+		test('expect to enable email 2FA', async () => {
+			await poAccountProfile.security2FASection.click();
+			await expect(poAccountProfile.enableEmail2FAButton).toBeVisible();
+			await poAccountProfile.enableEmail2FAButton.click();
+
+			await expect(poHomeChannel.toastSuccess).toBeVisible();
+			await expect(poAccountProfile.disableEmail2FAButton).toBeVisible();
+		});
+	});
 
 	test('Personal Access Tokens', async ({ page }) => {
 		const response = page.waitForResponse('**/api/v1/users.getPersonalAccessTokens');
@@ -120,8 +143,8 @@ test.describe.serial('settings-account-profile', () => {
 
 			const results = await makeAxeBuilder().analyze();
 			expect(results.violations).toEqual([]);
-		})
-	})
+		});
+	});
 
 	test.describe('Feature Preview', () => {
 		test('should not have any accessibility violations', async ({ page, makeAxeBuilder }) => {
@@ -129,8 +152,8 @@ test.describe.serial('settings-account-profile', () => {
 
 			const results = await makeAxeBuilder().analyze();
 			expect(results.violations).toEqual([]);
-		})
-	})
+		});
+	});
 
 	test.describe('Accessibility & Appearance', () => {
 		test('should not have any accessibility violations', async ({ page, makeAxeBuilder }) => {
@@ -138,8 +161,6 @@ test.describe.serial('settings-account-profile', () => {
 
 			const results = await makeAxeBuilder().analyze();
 			expect(results.violations).toEqual([]);
-		})
-	})
+		});
+	});
 });
-
-

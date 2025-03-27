@@ -1,9 +1,8 @@
 import { FieldGroup, TextInput, Field, FieldLabel, FieldRow, FieldError, ButtonGroup, Button, Callout } from '@rocket.chat/fuselage';
-import { useUniqueId } from '@rocket.chat/fuselage-hooks';
 import { Form, ActionLink } from '@rocket.chat/layout';
 import { useDocumentTitle } from '@rocket.chat/ui-client';
 import type { ReactElement } from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -12,8 +11,8 @@ import { useSendForgotPassword } from './hooks/useSendForgotPassword';
 
 export const ResetPasswordForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRouter }): ReactElement => {
 	const { t } = useTranslation();
-	const emailId = useUniqueId();
-	const formLabelId = useUniqueId();
+	const emailId = useId();
+	const formLabelId = useId();
 	const forgotPasswordFormRef = useRef<HTMLElement>(null);
 
 	useDocumentTitle(t('registration.component.resetPassword'), false);
@@ -47,47 +46,44 @@ export const ResetPasswordForm = ({ setLoginRoute }: { setLoginRoute: DispatchLo
 			<Form.Header>
 				<Form.Title id={formLabelId}>{t('registration.component.resetPassword')}</Form.Title>
 			</Form.Header>
-			{isSuccess ? (
+			<Form.Container>
 				<FieldGroup>
-					<Callout aria-live='assertive' role='status' mbs={24} icon='mail'>
-						{/* {t('registration.page.resetPassword.sent')} */}
-						Check your email, password has been sent..
-					</Callout>
+					<Field>
+						<FieldLabel required htmlFor={emailId}>
+							{t('registration.component.form.email')}
+						</FieldLabel>
+						<FieldRow>
+							<TextInput
+								{...register('email', {
+									required: t('Required_field', { field: t('registration.component.form.email') }),
+									pattern: {
+										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+										message: t('registration.page.resetPassword.errors.invalidEmail'),
+									},
+								})}
+								error={errors.email?.message}
+								aria-invalid={Boolean(errors.email)}
+								aria-required='true'
+								aria-describedby={`${emailId}-error`}
+								placeholder={t('registration.component.form.emailPlaceholder')}
+								id={emailId}
+							/>
+						</FieldRow>
+						{errors.email && (
+							<FieldError aria-live='assertive' id={`${emailId}-error`}>
+								{errors.email.message}
+							</FieldError>
+						)}
+					</Field>
 				</FieldGroup>
-			) : (
-				<Form.Container>
+				{isSuccess && (
 					<FieldGroup>
-						<Field>
-							<FieldLabel required htmlFor={emailId}>
-								{t('registration.component.form.email')}
-							</FieldLabel>
-							<FieldRow>
-								<TextInput
-									{...register('email', {
-										required: t('registration.component.form.requiredField'),
-										pattern: {
-											value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-											message: t('registration.page.resetPassword.errors.invalidEmail'),
-										},
-									})}
-									error={errors.email?.message}
-									aria-invalid={Boolean(errors.email)}
-									aria-required='true'
-									aria-describedby={`${emailId}-error`}
-									placeholder={t('registration.component.form.emailPlaceholder')}
-									id={emailId}
-								/>
-							</FieldRow>
-							{errors.email && (
-								<FieldError aria-live='assertive' id={`${emailId}-error`}>
-									{errors.email.message}
-								</FieldError>
-							)}
-						</Field>
+						<Callout aria-live='assertive' role='status' mbs={24} icon='mail'>
+							{t('registration.page.resetPassword.sent')}
+						</Callout>
 					</FieldGroup>
-				</Form.Container>
-			)}
-
+				)}
+			</Form.Container>
 			<Form.Footer>
 				<ButtonGroup>
 					<Button type='submit' loading={isSubmitting} primary>

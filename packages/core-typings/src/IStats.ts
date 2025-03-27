@@ -1,9 +1,21 @@
 import type { CpuInfo } from 'os';
 
+import type { IMatrixFederationStatistics } from './IMatrixFederationStatistics';
 import type { DeviceSessionAggregationResult, OSSessionAggregationResult, UserSessionAggregationResult } from './ISession';
 import type { ISettingStatisticsObject } from './ISetting';
 import type { ITeamStats } from './ITeam';
 import type { MACStats } from './omnichannel';
+
+export interface IVoIPPeriodStats {
+	calls?: number;
+	externalInboundCalls?: number;
+	externalOutboundCalls?: number;
+	internalCalls?: number;
+	externalCalls?: number;
+	successfulCalls?: number;
+	failedCalls?: number;
+	callsDuration?: number;
+}
 
 export interface IStats {
 	_id: string;
@@ -46,6 +58,8 @@ export interface IStats {
 	totalLivechatAgents: number;
 	totalLivechatManagers: number;
 	totalCustomFields: number;
+	totalLivechatPublicCustomFields: number;
+	livechatAutomaticForwardingUnansweredChats: boolean;
 	livechatEnabled: boolean;
 	isDepartmentRemovalEnabled: boolean;
 	totalChannelMessages: number;
@@ -53,6 +67,8 @@ export interface IStats {
 	totalDirectMessages: number;
 	totalDiscussionsMessages: number;
 	totalLivechatMessages: number;
+	totalLivechatRoomsWithPriority: number;
+	totalLivechatRoomsWithDepartment: number;
 	totalTriggers: number;
 	totalMessages: number;
 	federatedServers: number;
@@ -159,6 +175,17 @@ export interface IStats {
 		priorities?: number;
 		slas?: number;
 		businessUnits?: number;
+		omnichannelPdfTranscriptRequested?: number;
+		omnichannelPdfTranscriptSucceeded?: number;
+		omnichannelRoomsWithSlas?: number;
+		omnichannelRoomsWithPriorities?: number;
+		livechatMonitors?: number;
+		voip?: {
+			total?: IVoIPPeriodStats;
+			lastMonth?: IVoIPPeriodStats;
+			lastWeek?: IVoIPPeriodStats;
+			lastDay?: IVoIPPeriodStats;
+		};
 	};
 	createdAt: Date | string;
 	totalOTR: number;
@@ -169,7 +196,6 @@ export interface IStats {
 	dashboardCount: number;
 	joinJitsiButton: number;
 	totalBroadcastRooms: number;
-	totalRoomsWithActiveLivestream: number;
 	totalTriggeredEmails: number;
 	totalRoomsWithStarred: number;
 	totalRoomsWithPinned: number;
@@ -220,13 +246,28 @@ export interface IStats {
 	totalWebRTCCalls: number;
 	uncaughtExceptionsCount: number;
 	push: number;
+	pushSecured: boolean;
 	dailyPeakConnections: number;
 	maxMonthlyPeakConnections: number;
-	matrixFederation: {
-		enabled: boolean;
-	};
+	matrixFederation: IMatrixFederationStatistics;
 	webRTCEnabled: boolean;
 	webRTCEnabledForOmnichannel: boolean;
 	omnichannelWebRTCCalls: number;
 	statsToken?: string;
+	contactVerification: {
+		totalContacts: number;
+		totalUnknownContacts: number;
+		totalMergedContacts: number;
+		totalConflicts: number;
+		totalResolvedConflicts: number;
+		totalBlockedContacts: number;
+		totalPartiallyBlockedContacts: number;
+		totalFullyBlockedContacts: number;
+		totalVerifiedContacts: number;
+		avgChannelsPerContact: number;
+		totalContactsWithoutChannels: number;
+		totalImportedContacts: number;
+		totalUpsellViews: number;
+		totalUpsellClicks: number;
+	};
 }

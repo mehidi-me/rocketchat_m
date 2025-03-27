@@ -15,13 +15,12 @@ export class Registration {
 		return this.page.locator('role=button[name="Reset"]');
 	}
 
-
 	get btnLogin(): Locator {
 		return this.page.locator('role=button[name="Login"]');
 	}
 
 	get btnLoginWithSaml(): Locator {
-		return this.page.locator('role=button[name="SAML"]');
+		return this.page.locator('role=button[name="SAML test login button"]');
 	}
 
 	get btnLoginWithGoogle(): Locator {

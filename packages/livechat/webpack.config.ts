@@ -14,6 +14,7 @@ const common = (args: webpack.WebpackOptionsNormalized): Partial<webpack.Configu
 	devtool: args.mode === 'production' ? 'source-map' : 'eval',
 	resolve: {
 		extensions: ['.js', '.jsx', '.ts', '.tsx'],
+		symlinks: false,
 		alias: {
 			'react': 'preact/compat',
 			'react-dom': 'preact/compat',
@@ -73,7 +74,6 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 						{
 							loader: 'postcss-loader',
 							options: {
-								ident: 'postcss',
 								sourceMap: true,
 							},
 						},
@@ -97,7 +97,6 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 						{
 							loader: 'postcss-loader',
 							options: {
-								ident: 'postcss',
 								sourceMap: true,
 							},
 						},
@@ -162,7 +161,7 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 	{
 		...common(args),
 		entry: {
-			'rocketchat-livechat.min': _('./src/widget.js'),
+			'rocketchat-livechat.min': _('./src/widget.ts'),
 		} as webpack.Entry,
 		output: {
 			path: _('./dist'),

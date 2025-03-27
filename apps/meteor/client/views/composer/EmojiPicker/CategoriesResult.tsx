@@ -1,25 +1,24 @@
 import { css } from '@rocket.chat/css-in-js';
 import { Box } from '@rocket.chat/fuselage';
-import type { MouseEvent, UIEventHandler, MutableRefObject } from 'react';
-import React, { forwardRef, useRef } from 'react';
+import type { MouseEvent, UIEventHandler } from 'react';
+import { forwardRef, memo, useRef } from 'react';
 import type { VirtuosoHandle } from 'react-virtuoso';
 import { Virtuoso } from 'react-virtuoso';
 
-import type { EmojiCategoryPosition, EmojiByCategory } from '../../../../app/emoji/client';
-import ScrollableContentWrapper from '../../../components/ScrollableContentWrapper';
 import EmojiCategoryRow from './EmojiCategoryRow';
+import type { EmojiByCategory } from '../../../../app/emoji/client';
+import { VirtuosoScrollbars } from '../../../components/CustomScrollbars';
 
 type CategoriesResultProps = {
 	emojiListByCategory: EmojiByCategory[];
-	categoriesPosition: MutableRefObject<EmojiCategoryPosition[]>;
 	customItemsLimit: number;
 	handleLoadMore: () => void;
 	handleSelectEmoji: (event: MouseEvent<HTMLElement>) => void;
-	handleScroll: UIEventHandler<'div'>;
+	handleScroll: UIEventHandler<HTMLDivElement>;
 };
 
 const CategoriesResult = forwardRef<VirtuosoHandle, CategoriesResultProps>(function CategoriesResult(
-	{ emojiListByCategory, categoriesPosition, customItemsLimit, handleLoadMore, handleSelectEmoji, handleScroll },
+	{ emojiListByCategory, customItemsLimit, handleLoadMore, handleSelectEmoji, handleScroll },
 	ref,
 ) {
 	const wrapper = useRef<HTMLDivElement>(null);
@@ -39,7 +38,7 @@ const CategoriesResult = forwardRef<VirtuosoHandle, CategoriesResultProps>(funct
 				totalCount={emojiListByCategory.length}
 				data={emojiListByCategory}
 				onScroll={handleScroll}
-				components={{ Scroller: ScrollableContentWrapper }}
+				components={{ Scroller: VirtuosoScrollbars }}
 				isScrolling={(isScrolling: boolean) => {
 					if (!wrapper.current) {
 						return;
@@ -51,10 +50,9 @@ const CategoriesResult = forwardRef<VirtuosoHandle, CategoriesResultProps>(funct
 						wrapper.current.classList.remove('pointer-none');
 					}
 				}}
-				itemContent={(_, data) => (
+				itemContent={(_, { key, ...data }) => (
 					<EmojiCategoryRow
-						categoryKey={data.key}
-						categoriesPosition={categoriesPosition}
+						categoryKey={key}
 						customItemsLimit={customItemsLimit}
 						handleLoadMore={handleLoadMore}
 						handleSelectEmoji={handleSelectEmoji}
@@ -66,4 +64,4 @@ const CategoriesResult = forwardRef<VirtuosoHandle, CategoriesResultProps>(funct
 	);
 });
 
-export default CategoriesResult;
+export default memo(CategoriesResult);
