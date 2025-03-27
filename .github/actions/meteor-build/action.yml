@@ -13,17 +13,31 @@ inputs:
     required: true
     description: 'Node version'
     type: string
+  NPM_TOKEN:
+    required: false
+    description: 'NPM token'
+  deno-version:
+    required: true
+    description: 'Deno version'
+    type: string
 
 runs:
   using: composite
 
   steps:
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 4
+
     - name: Setup NodeJS
       uses: ./.github/actions/setup-node
       with:
         node-version: ${{ inputs.node-version }}
+        deno-version: ${{ inputs.deno-version }}
         cache-modules: true
         install: true
+        NPM_TOKEN: ${{ inputs.NPM_TOKEN }}
 
     # - name: Free disk space
     #   run: |
@@ -86,7 +100,7 @@ runs:
         meteor node -v
         git version
 
-    - uses: dtinth/setup-github-actions-caching-for-turbo@v1
+    - uses: rharkor/caching-for-turbo@v1.5
 
     - name: Translation check
       shell: bash
@@ -98,18 +112,19 @@ runs:
       working-directory: ./apps/meteor
       run: meteor reset
 
-    - name: Build Rocket.Chat From Pull Request
+    - name: Build Rocket.Chat
       shell: bash
-      if: startsWith(github.ref, 'refs/pull/') == true
       env:
         METEOR_PROFILE: 1000
         BABEL_ENV: ${{ inputs.coverage == 'true' && 'coverage' || '' }}
-      run: yarn build:ci -- --directory /tmp/dist
+      run: |
+        # check if BABEL_ENV is set to coverage
+        if [[ $BABEL_ENV == "coverage" ]]; then
+          echo -e "rocketchat:coverage\n" >> ./apps/meteor/.meteor/packages
+          echo "Coverage enabled"
+        fi
 
-    - name: Build Rocket.Chat
-      shell: bash
-      if: startsWith(github.ref, 'refs/pull/') != true
-      run: yarn build:ci -- --directory /tmp/dist
+        yarn build:ci
 
     - name: Prepare build
       shell: bash
@@ -135,10 +150,10 @@ runs:
         password: ${{ inputs.SSH_PASSWORD }}
         port: ${{ inputs.SSH_PORT }}
         script: |
-          lxc file push -r /home/Rocket.Chat.tar.gz ${{ inputs.LXC_CONTAINER_NAME }}/home
-          lxc exec ${{ inputs.LXC_CONTAINER_NAME }} -- tar -xzf /home/Rocket.Chat.tar.gz -C /home/rocketchat
+          sudo incus file push -r /home/Rocket.Chat.tar.gz ${{ inputs.LXC_CONTAINER_NAME }}/home
+          sudo incus exec ${{ inputs.LXC_CONTAINER_NAME }} -- tar -xzf /home/Rocket.Chat.tar.gz -C /home/rocketchat
 
-          lxc exec ${{ inputs.LXC_CONTAINER_NAME }} -- bash -ilc "cd /home/rocketchat/bundle/programs/server && /root/.nvm/versions/node/v14.21.3/bin/npm install && pm2 restart rocketchat"
+          sudo incus exec ${{ inputs.LXC_CONTAINER_NAME }} -- bash -ilc "cd /home/rocketchat/bundle/programs/server && /root/.nvm/versions/node/v14.21.3/bin/npm install && pm2 restart rocketchat"
 
 
      
