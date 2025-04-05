@@ -65,7 +65,8 @@ export const ResetPasswordForm = ({ setLoginRoute }: { setLoginRoute: DispatchLo
 								aria-invalid={Boolean(errors.email)}
 								aria-required='true'
 								aria-describedby={`${emailId}-error`}
-								placeholder={t('registration.component.form.emailPlaceholder')}
+								//placeholder={t('registration.component.form.emailPlaceholder')}
+								placeholder='Please Check your email INBOX or SPAM – Password has been sent..'
 								id={emailId}
 							/>
 						</FieldRow>
@@ -96,6 +97,7 @@ export const ResetPasswordForm = ({ setLoginRoute }: { setLoginRoute: DispatchLo
 					}}
 				>
 					{t('registration.page.register.back')}
+					
 				</ActionLink>
 			</Form.Footer>
 		</Form>
